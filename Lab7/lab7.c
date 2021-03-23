@@ -10,9 +10,11 @@
 #include "Timer.h"
 #include "lcd.h"
 #include "adc.h"
-
+#include "button.h"
+#include <math.h>
 
 int main(void) {
+    button_init();
 	timer_init(); // Must be called before lcd_init(), which uses timer functions
 	lcd_init();
 	adc_init();
@@ -21,12 +23,27 @@ int main(void) {
 
 	int value;
 	int i;
+	int total;
+	int distance;
 
-	while(1){
-	    value = adc_read();
-	    lcd_printf("%d", value);
 
-	    for(i =0; i< 100000; i++){};
-	}
+    while(1){
+        value = adc_read();
+        distance = 276 - (34.1 * log(value));
+        lcd_printf("Raw: %d Dist: %d", value, distance);
+
+        for(i =0; i< 1000000; i++){};
+    }
+
+//	while(1){
+//	    for(i = 0; i < 1000; i++){
+//	        total += adc_read();
+//	    }
+//	    lcd_printf("Average: %d", total/1000);
+//
+//	    while(!button_getButton()){};
+//	    for(i =0; i < 1000000; i++){};
+//	    total = 0;
+//	}
 
 }
