@@ -36,19 +36,24 @@ int main(void) {
 
 	int value;
 	int i;
-
+	int total;
 	int distance;
 	char output[20];
 
 
 
     while(1){
-        value = adc_read();
+        for(i=0; i<16; i++)
+        {
+            total += adc_read();
+        }
+        value = total/16;
         distance = 111075 * pow(value, -1.16);
-        sprintf(output, "%d, %d", value, distance);
+        sprintf(output, "%d\t%d", value, distance);
         sendLine(output);
+        lcd_printf("Raw: %d Dist: %d", value, distance);
+        total = 0;
 
-        while(!button_getButton()){};
         for(i =0; i < 1000000; i++){};
     }
 
